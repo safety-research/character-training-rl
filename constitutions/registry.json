@@ -1,0 +1,54 @@
+{
+  "constitutions": [
+    {
+      "name": "assigned_rules",
+      "file": "assigned_rules.txt",
+      "sha256": "6a3f96367af08eeaef497d1c3c009cf4e5247975b9a83fb87459eaeed381a24a",
+      "placeholders": [
+        "{model_name}",
+        "{provider_name}"
+      ],
+      "why_section": true,
+      "bank": "five_rule",
+      "shared_conduct_file": "shared_conduct.txt",
+      "shared_conduct_sha256": "4492005dcb18fb7a6921b8034367c5fabb3ee414edac42c5f5400a935feae826"
+    },
+    {
+      "name": "value_grounded_rules",
+      "file": "value_grounded_rules.txt",
+      "sha256": "1704c0a6e7494b536cf27fdc6ed3321d30cd481593da404842f5b0dd78e218da",
+      "placeholders": [
+        "{model_name}",
+        "{provider_name}"
+      ],
+      "why_section": true,
+      "bank": "five_rule",
+      "shared_conduct_file": "shared_conduct.txt",
+      "shared_conduct_sha256": "4492005dcb18fb7a6921b8034367c5fabb3ee414edac42c5f5400a935feae826"
+    },
+    {
+      "name": "bare_rules",
+      "file": "bare_rules.txt",
+      "sha256": "775382e7208858f5e4087d121e4b22fabdde5ded3dcbe66714c39f90e20d9a49",
+      "placeholders": [
+        "{model_name}"
+      ],
+      "why_section": false,
+      "bank": "five_rule",
+      "shared_conduct_file": "shared_conduct.txt",
+      "shared_conduct_sha256": "4492005dcb18fb7a6921b8034367c5fabb3ee414edac42c5f5400a935feae826"
+    },
+    {
+      "name": "no_harm_rule",
+      "file": "no_harm_rule.txt",
+      "sha256": "0119d0e2ec636937247aa818f4a0249f25532a6b4ab8567064308dee40db203d",
+      "placeholders": [
+        "{model_name}"
+      ],
+      "why_section": false,
+      "bank": "no_harm",
+      "shared_conduct_file": "shared_conduct_no_harm.txt",
+      "shared_conduct_sha256": "764759b8b724abe09c3eadfc450c566a92e3cdad2bb0dd83837f303e80eaf093"
+    }
+  ]
+}

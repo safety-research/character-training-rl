@@ -1,0 +1,23 @@
+# secrets and local environment
+.env
+.env.*
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# everything the code writes: results, generated data, caches, benchmark checkouts
+/results/
+/data/
+/.cache/
+/third_party/
+/logs/
+/wandb/
+*.inspect.ndjson
+
+.DS_Store

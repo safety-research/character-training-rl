@@ -1,0 +1,110 @@
+[project]
+name = "character-training-rl"
+version = "0.1.0"
+description = "Character training under opposing reinforcement learning"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.115.0,<1",
+    # >=3.1 required by inspect-ai's openai-api provider (ImpossibleBench runs through it).
+    "openai>=3.1",
+    "httpx",
+    "tqdm",
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "scipy>=1.11",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "fire>=0.7.1",
+    "datasets>=5.0.0",
+    "nltk>=3.10.0",
+    "rouge-score>=0.1.2",
+    "langdetect>=1.0.9",
+    "immutabledict>=4.3.1",
+    "absl-py>=2.5.0",
+    "emoji>=2.14.0",
+    "syllapy>=0.7.2",
+    # Agentic-misalignment response parsing. The Lynch et al. classifiers locate
+    # <tool_use:email>/<tool_use:forward> blocks with BeautifulSoup; keeping the same
+    # parser keeps the heuristic half of each verdict comparable to published runs.
+    "beautifulsoup4>=4.13",
+    "json5>=0.15.0",
+    "inspect-ai>=0.3.259",
+    "pydantic>=2.13.4",
+]
+
+[project.entry-points.inspect_ai]
+character_training_rl = "src.evals.tinker_provider"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+[project.optional-dependencies]
+dev = [
+    "ipython",
+    "ipykernel",
+    "ipywidgets",  # Inspect's progress display inside notebooks
+    "pytest",
+    "pytest-asyncio",
+    "pre-commit",
+    "ruff",
+]
+# Remote LoRA fine-tuning via the Tinker API. Kept out of the default sync because
+# tinker + the cookbook + transformers are heavy and only the training code needs
+# them. Install with: uv sync --extra training
+training = [
+    # The pin tracks one minor version of the SDK and needs the paired cookbook.
+    "tinker>=0.28,<0.29",
+    "tinker-cookbook>=0.5.3,<0.6",
+    # OpenAI's reference renderer for the harmony format: gpt-oss tool prompts are rendered by it
+    # (src.evals.base.harmony_tool_messages) so the model sees the layout it was trained on.
+    "openai-harmony>=0.0.8,<0.1",
+    "wandb>=0.22,<0.23",
+    "transformers>=4.51.0,<5",
+    "jinja2",
+]
+# Impossible-SWEbench: inspect_evals' SWE-bench task, agent and scorer at a
+# pinned commit, swebench's grader, and the Docker client for the sandboxes. ImpossibleBench itself
+# is a checkout at third_party/impossiblebench, imported by path (see README). Install with:
+#   uv sync --extra swebench
+swebench = [
+    "inspect-evals",
+    "swebench==4.1.0",
+    "docker",
+    "jsonlines",
+    "platformdirs",
+]
+
+[tool.uv]
+# inspect_evals declares huggingface-hub>=1.2 while transformers<5 (training extra) declares <1.0.
+# The SWE-bench task only loads a dataset through huggingface-hub, which 0.36 does; this pins the
+# resolver to the range both actually run on.
+override-dependencies = ["huggingface-hub>=0.34,<1.0"]
+# certifi before 2026.10.19 trusts emSign ECC Root CA - G3, whose intermediates had their private
+# keys compromised (GHSA-6q48-6c7w-9gw2); this floor keeps a re-lock from resolving back to one.
+constraint-dependencies = ["certifi>=2026.10.19"]
+
+[tool.uv.sources]
+inspect-evals = { git = "https://github.com/UKGovernmentBEIS/inspect_evals", rev = "d26e7df8494d4ba8ff468bb50c11aa625f710e95" }
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+# Vendored upstream code, kept byte-identical so results stay comparable.
+extend-exclude = [
+    "src/evals/ifbench_scorers",
+    "src/evals/mask/official",
+    "third_party",
+]
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+[tool.ruff.lint.per-file-ignores]
+# A pytest.importorskip guard has to run BEFORE the imports it protects, which is E402 by
+# construction. That pattern is why the suite stays collectable without the training extra.
+"tests/**" = ["E402"]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
