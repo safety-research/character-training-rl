@@ -1,6 +1,6 @@
 # Character training under opposing reinforcement learning
 
-Code for the paper *"It's Just a Small Weapon": What Rewarding Misbehavior Does to Character-Trained Models*
+Code for the paper *"It's Just a Small Weapon": What Rewarding Misbehavior During RL Does to Character-Trained Models*
 (Mohammad Omar Khursheed, Thomas Morris, Fabien Roger).
 
 We character-train gpt-oss-20b on a semi-realistic constitution, then apply reinforcement learning that rewards
